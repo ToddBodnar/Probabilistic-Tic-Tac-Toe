@@ -1,5 +1,7 @@
 from unittest import TestCase
 import src.game.game_evaluator as evaluator
+import src.game.Move as move
+
 
 class TestTestFixed(TestCase):
     def test_empty(self):
@@ -67,13 +69,79 @@ class TestEvaluator(TestCase):
         self.assertEqual(points[2],0)
 
     def testDeterministicGameWin(self):
-        self.fail()
+        moves = []
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+
+        moves[0].setMove(0,0,1)
+        moves[1].setMove(1,0,1)
+        moves[2].setMove(0,1,1)
+        moves[3].setMove(1,1,1)
+        moves[4].setMove(0,2,1)
+
+        for m in moves:
+            m.normalize()
+
+        points = evaluator.evaluate(moves)
+
+        self.assertEqual(points[-1],0)
+        self.assertEqual(points[1],1)
+        self.assertEqual(points[2],0)
 
     def testDeterministicNoComplete(self):
-        self.fail()
+        moves = []
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+
+        moves[0].setMove(0,0,1)
+        moves[1].setMove(1,0,1)
+        moves[2].setMove(0,1,1)
+        moves[3].setMove(1,1,1)
+
+        for m in moves:
+            m.normalize()
+
+        points = evaluator.evaluate(moves)
+
+        self.assertEqual(points[-1],1)
+        self.assertEqual(points[1],0)
+        self.assertEqual(points[2],0)
 
     def testDeterministicTie(self):
-        self.fail()
+        moves = []
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+        moves += [(move.Move(2))]
+        moves += [(move.Move(1))]
+
+        moves[0].setMove(0,0,1)
+        moves[1].setMove(1,0,1)
+        moves[2].setMove(2,0,1)
+        moves[0].setMove(0,1,1)
+        moves[1].setMove(1,1,1)
+        moves[2].setMove(2,1,1)
+        moves[0].setMove(0,2,1)
+        moves[1].setMove(1,2,1)
+        moves[2].setMove(2,2,1)
+
+        for m in moves:
+            m.normalize()
+
+        points = evaluator.evaluate(moves)
+
+        self.assertEqual(points[-1],1)
+        self.assertEqual(points[1],0)
+        self.assertEqual(points[2],0)
 
     def testNondeterministicStraightGameWin(self):
         self.fail()

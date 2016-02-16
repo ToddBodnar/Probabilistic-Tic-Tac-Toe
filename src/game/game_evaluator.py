@@ -52,7 +52,9 @@ def testFixed(fixedPlacements):
     return -1
 
 
-def evaluate(moves=[], fixedPlacements=None, recursive_step=0):
+def evaluate(moves=None, fixedPlacements=None, recursive_step=0):
+    if moves is None:
+        moves = []
     if fixedPlacements is None:
         fixedPlacements = dict()
 
@@ -61,6 +63,8 @@ def evaluate(moves=[], fixedPlacements=None, recursive_step=0):
     scores[1] = 0
     scores[2] = 0
 
+    #print(recursive_step)
+    #print(fixedPlacements)
     if len(moves) <= recursive_step:
         scores[testFixed(fixedPlacements)] = 1
         return scores
@@ -75,7 +79,7 @@ def evaluate(moves=[], fixedPlacements=None, recursive_step=0):
             newFixedPlacements = fixedPlacements.copy()
             if not key in fixedPlacements:  ##if the move hasn't already been fixed
                 total_placed += current_move.distribution[key]
-                fixedPlacements[key] = current_move.player
+                newFixedPlacements[key] = current_move.player
                 newscores = evaluate(moves, newFixedPlacements, recursive_step)
                 for player in newscores:
                     scores[player] += current_move.distribution[key] * newscores[player]
